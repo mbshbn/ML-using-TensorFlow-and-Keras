@@ -1,10 +1,9 @@
 # Supervised Learning (binary classification for an imbalanced data) 
-## Project: Finding Donors for CharityML
+## using [scikit-learn] (http://scikit-learn.org/stable/supervised_learning.html)
 ### Goal
-Classify people based on the features explained below, to predict their income class, either above 50K or below 50K.
+Classify people based on the features explained below, to predict their income class, either above 50K or below 50K. This can be used to identigy possible donors to a charity. This is for the 1st project of [the Udacity course: Intro to Machine Learning with TensorFlow](https://www.udacity.com/course/intro-to-machine-learning-with-tensorflow-nanodegree--nd230), and [its github repository](https://github.com/udacity/intro-to-ml-tensorflow).  
 
 ### Data
-
 The modified census dataset consists of approximately 32,000 data points, with each datapoint having 13 features. This dataset is a modified version of the dataset published in the paper *"Scaling Up the Accuracy of Naive-Bayes Classifiers: a Decision-Tree Hybrid",* by Ron Kohavi. You may find this paper [online](https://www.aaai.org/Papers/KDD/1996/KDD96-033.pdf), with the original dataset hosted on [UCI](https://archive.ics.uci.edu/ml/datasets/Census+Income).
 
 **Features**
@@ -25,7 +24,6 @@ The modified census dataset consists of approximately 32,000 data points, with e
 **Target Variable**
 - `income`: Income Class (<=50K, >50K)
 
-
 ### Install
 
 This project requires **Python 3.x** and the following Python libraries installed:
@@ -40,13 +38,24 @@ You will also need to have software installed to run and execute an [iPython Not
 We recommend students install [Anaconda](https://www.continuum.io/downloads), a pre-packaged Python distribution that contains all of the necessary libraries and software for this project.
 
 ### Pipeline 
-My pipeline consisted of the follwoing steps, and the code is called `finding_donors.ipynb`. I used the following libraries
-```
+My pipeline consist of the follwoing steps, and the code is called `finding_donors.ipynb`. I used the following libraries
 
-```
-1. 
-2.
-
+1. Imposting data
+2. Exploring the data, e.g. computing the number records for each output class 
+2. Preprocessing the data
+   1. Removing redundant data
+   2. Transforming Skewed Continuous Features
+   3. Normalizing Numerical Features
+   4. one-hot encoding
+   5. Shuffle and Split Data
+3. Training and Predicting
+  1. Useing fbeta_score and accuracy_score
+  2. Initial Model Evaluation
+  3. Improving models (Model Tuning)
+    1. using grid search (GridSearchCV)
+    2. useing Randomized Serach
+    3. Feature Importance 
+  
 ### Final result
 
 

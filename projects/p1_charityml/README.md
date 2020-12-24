@@ -115,8 +115,7 @@ sns.countplot(data['income'] )
                                                     random_state = 42)
     ```
 3. Training and Predicting
-  1. Useing fbeta_score and accuracy_score
-   from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, fbeta_score
+   1. Useing fbeta_score and accuracy_score from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, fbeta_score
    ```
    def train_predict(learner, sample_size, X_train, y_train, X_test, y_test): 
     results = {}
@@ -151,7 +150,7 @@ sns.countplot(data['income'] )
          results[clf_name][i] = \
          train_predict(clf, samples, X_train, y_train, X_test, y_test)
    ```
-  3. Improving models (Model Tuning)
+   3. Improving models (Model Tuning)
       1. using grid search (GridSearchCV)
       ```
       from sklearn.model_selection import GridSearchCV

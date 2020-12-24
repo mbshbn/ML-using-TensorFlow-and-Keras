@@ -174,7 +174,7 @@ sns.countplot(data['income'] )
       predictions = (clf.fit(X_train, y_train)).predict(X_test)
       best_predictions = best_clf.predict(X_test)
       ```
-      3. confusion matrix
+      2. confusion matrix
       ```
       from sklearn.metrics import confusion_matrix
       confusion_matrix(y_test,best_predictions)

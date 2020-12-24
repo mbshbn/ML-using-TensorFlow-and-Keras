@@ -40,24 +40,196 @@ We recommend students install [Anaconda](https://www.continuum.io/downloads), a 
 ### Pipeline 
 My pipeline consist of the follwoing steps, and the code is called `finding_donors.ipynb`. I used the following libraries
 
-1. Imposting data
+1. Importing data
+```
+data = pd.read_csv("census.csv")
+```
 2. Exploring the data, e.g. computing the number records for each output class 
+```
+display(data.head(n=5))
+n_records = len(data.index)
+n_at_most_50k, n_greater_50k = data.income.value_counts()
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.countplot(data['income'] )
+```
+
 2. Preprocessing the data
    1. Removing redundant data
+   ```
+   features_raw = data.drop('education_level', axis = 1)
+   ```
    2. Transforming Skewed Continuous Features
+   ```
+   features_log_transformed = pd.DataFrame(data = features_raw)
+   features_log_transformed[skewed] = features_raw[skewed].apply(lambda x: np.log(x + 1))
+   ```
    3. Normalizing Numerical Features
+   ```from sklearn.preprocessing import MinMaxScaler
+
+   # Initialize a scaler, then apply it to the features
+   scaler = MinMaxScaler() # default=(0, 1)
+   # select numerical data 
+   numerical = ['age', 'education-num', 'capital-gain', 'capital-loss', 'hours-per-week']
+   
+   features_log_minmax_transform = pd.DataFrame(data = features_log_transformed)
+   features_log_minmax_transform[numerical] = scaler.fit_transform(features_log_transformed[numerical])
+   ```
    4. one-hot encoding
-   5. Shuffle and Split Data
+   ```
+   income = income_raw.apply(lambda x: 0 if x == '<=50K' else 1)
+   features_final = pd.get_dummies(features_log_minmax_transform)
+   ```
+   5. examine if there is any null dat
+   ```
+   features_final.isnull().sum()
+   income.isnull().sum()
+   ```
+   5. Shuffle and Split Data into training and testing
+   ```
+   from sklearn.model_selection import train_test_split
+   X_train, X_test, y_train, y_test = train_test_split(features_final, 
+                                                    income, 
+                                                    test_size = 0.2, 
+                                                    random_state = 42)
+    ```
 3. Training and Predicting
   1. Useing fbeta_score and accuracy_score
+   from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, fbeta_score
+   ```
+   def train_predict(learner, sample_size, X_train, y_train, X_test, y_test): 
+    results = {}
+    # Fit the learner to the training data using slicing with 'sample_size' 
+    learner.fit(X_train[:sample_size], y_train[:sample_size])
+    predictions_test = learner.predict(X_test)
+    predictions_train = learner.predict(X_train[:300])
+    results['acc_train'] = accuracy_score(y_train[:300],predictions_train)
+    results['acc_test'] = accuracy_score(y_test,predictions_test)
+    results['f_train'] = fbeta_score(y_train[:300],predictions_train, beta=0.5)
+    results['f_test'] = fbeta_score(y_test,predictions_test, beta=0.5)
+    return results
+   ```
   2. Initial Model Evaluation
+  ```
+   from sklearn.tree import DecisionTreeClassifier
+   from sklearn.ensemble import  RandomForestClassifier
+   from sklearn.svm import SVC
+
+   random_state=100
+
+   clf_B = DecisionTreeClassifier(random_state=random_state, max_depth=10 ,min_samples_leaf=15 )
+   clf_d = RandomForestClassifier(random_state=random_state, max_depth=10 ,min_samples_leaf=15 )
+   clf_i = SVC(random_state=random_state)
+
+   # Collect results on the learners
+   results = {}
+   for clf in [clf_B, clf_d, clf_i]:
+       clf_name = clf.__class__.__name__
+      results[clf_name] = {}
+      for i, samples in enumerate([samples_1, samples_10, samples_100]):
+         results[clf_name][i] = \
+         train_predict(clf, samples, X_train, y_train, X_test, y_test)
+   ```
   3. Improving models (Model Tuning)
-    1. using grid search (GridSearchCV)
-    2. useing Randomized Serach
-    3. Feature Importance 
+      1. using grid search (GridSearchCV)
+      ```
+      from sklearn.model_selection import GridSearchCV
+      from sklearn.metrics import make_scorer
+      from sklearn.model_selection import GridSearchCV
+      from sklearn.metrics import make_scorer
+      clf_3 = DecisionTreeClassifier(random_state=42)
+
+      parameters_3 = {'max_depth':[2,4,6,8,10,15],'min_samples_leaf':[2,4,6,8,10,15], 'min_samples_split':[2,4,6,8,10,15]}
+      scorer = make_scorer(fbeta_score,beta=0.5)
+
+      # TODO: Perform grid search on the classifier using 'scorer' as the scoring method using GridSearchCV()
+      grid_obj = GridSearchCV(clf, param_grid=parameters, scoring = scorer)
+
+      # TODO: Fit the grid search object to the training data and find the optimal parameters using fit()
+      grid_fit = grid_obj.fit(X_train, y_train)
+
+      # Get the estimator
+      best_clf = grid_fit.best_estimator_
+
+      # Make predictions using the unoptimized and model
+      predictions = (clf.fit(X_train, y_train)).predict(X_test)
+      best_predictions = best_clf.predict(X_test)
+      ```
+      3. confusion matrix
+      ```
+      from sklearn.metrics import confusion_matrix
+      confusion_matrix(y_test,best_predictions)
+      pd.crosstab(y_test, best_predictions, rownames = ['Actual'], colnames =['Predicted'], margins = True)
+      ```   
+      3. Feature Relevance Observation
+      ```
+      sns.set(style="ticks")
+      features_final.describe()
+
+      selected_columns = features_final[['age', 'education-num', 'capital-gain', 'capital-loss', 'hours-per-week']]
+      new_df1 = selected_columns.copy()
+      new_df2 = pd.concat([new_df1, income], axis=1, sort=False)
+
+      sns.heatmap(new_df2.corr(), annot=True, cmap="YlGnBu");
+
+      sns.pairplot(new_df2, hue = 'income');
+
+      new_df2.hist();
+
+      ```
+      and
+      ```
+      learner = AdaBoostClassifier()
+
+      learner.fit(X_train, y_train)
+      predictions_test = learner.predict(X_test)
+
+      features = features_final.columns[:features_final.shape[1]]
+
+      importances = learner.feature_importances_
+      indices = np.argsort(importances)
+      ```
+      4. Feature Importance: i.e. using only the most important features such that the accuracy does not decrease
+      ```
+      from sklearn.base import clone
+
+      X_train_reduced = X_train[X_train.columns.values[(np.argsort(importances)[::-1])[:5]]]
+      X_test_reduced = X_test[X_test.columns.values[(np.argsort(importances)[::-1])[:5]]]
+
+      clf = (clone(best_clf)).fit(X_train_reduced, y_train)
+
+      reduced_predictions = clf.predict(X_test_reduced)
+      ```
+      or 
+      ```
+      X_train_reduced = SelectPercentile(chi2, percentile=10).fit_transform(X_train, y_train)
+      X_test_reduced = SelectPercentile(chi2, percentile=10).fit_transform(X_test, y_test)
+      clf = (clone(best_clf)).fit(X_train_reduced, y_train)
+      reduced_predictions = clf.predict(X_test_reduced)
+      ```
+      or
+      ```
+      from sklearn.feature_selection import SelectKBest, chi2
+      X_train_reduced = SelectKBest(chi2,  k=20).fit_transform(X_train, y_train)
+      X_test_reduced = SelectKBest(chi2,  k=20).fit_transform(X_test, y_test)
+      clf = (clone(best_clf)).fit(X_train_reduced, y_train)
+      reduced_predictions = clf.predict(X_test_reduced)
+      ```
+      or
+      ```
+      from sklearn.feature_selection import RFE
+
+      estimator = clone(best_clf)
+      selector = RFE(estimator, n_features_to_select=5, step=1)
+      selector = selector.fit(X_train, y_train)
+
+      RFE_predictions = selector.predict(X_test)
+      ```
   
 ### Final result
-
+Accuracy on testing data: 0.8556
+F-score on testing data: 0.7408
 
 
 ### Code

@@ -163,10 +163,10 @@ sns.countplot(data['income'] )
       parameters_3 = {'max_depth':[2,4,6,8,10,15],'min_samples_leaf':[2,4,6,8,10,15], 'min_samples_split':[2,4,6,8,10,15]}
       scorer = make_scorer(fbeta_score,beta=0.5)
 
-      # TODO: Perform grid search on the classifier using 'scorer' as the scoring method using GridSearchCV()
+      # Perform grid search on the classifier using 'scorer' as the scoring method using GridSearchCV()
       grid_obj = GridSearchCV(clf, param_grid=parameters, scoring = scorer)
 
-      # TODO: Fit the grid search object to the training data and find the optimal parameters using fit()
+      # Fit the grid search object to the training data and find the optimal parameters using fit()
       grid_fit = grid_obj.fit(X_train, y_train)
 
       # Get the estimator
@@ -176,13 +176,13 @@ sns.countplot(data['income'] )
       predictions = (clf.fit(X_train, y_train)).predict(X_test)
       best_predictions = best_clf.predict(X_test)
       ```
-      2. confusion matrix
+      2. using confusion matrix
       ```
       from sklearn.metrics import confusion_matrix
       confusion_matrix(y_test,best_predictions)
       pd.crosstab(y_test, best_predictions, rownames = ['Actual'], colnames =['Predicted'], margins = True)
       ```   
-      3. Feature Relevance Observation
+      3. using Feature Relevance Observation
       ```
       sns.set(style="ticks")
       features_final.describe()
@@ -210,7 +210,7 @@ sns.countplot(data['income'] )
       importances = learner.feature_importances_
       indices = np.argsort(importances)
       ```
-      4. Feature Importance: i.e. using only the most important features such that the accuracy does not decrease
+      4. uisng Feature Importance: i.e. using only the most important features such that the accuracy does not decrease
       ```
       from sklearn.base import clone
 

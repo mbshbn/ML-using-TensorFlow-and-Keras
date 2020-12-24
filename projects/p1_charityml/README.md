@@ -37,6 +37,24 @@ You will also need to have software installed to run and execute an [iPython Not
 
 We recommend students install [Anaconda](https://www.continuum.io/downloads), a pre-packaged Python distribution that contains all of the necessary libraries and software for this project.
 
+### Code
+
+The code is provided in the `finding_donors.ipynb` notebook file. the `visuals.py` Python file and the `census.csv` dataset file is used. 
+
+### Run
+
+In a terminal or command window, navigate to the top-level project directory `finding_donors/` (that contains this README) and run one of the following commands:
+
+```bash
+ipython notebook finding_donors.ipynb
+```  
+or
+```bash
+jupyter notebook finding_donors.ipynb
+```
+
+This will open the iPython Notebook software and project file in your browser.
+
 ### Pipeline 
 My pipeline consist of the follwoing steps, and the code is called `finding_donors.ipynb`. I used the following libraries
 
@@ -232,20 +250,4 @@ Accuracy on testing data: 0.8556, and
 F-score on testing data: 0.7408
 
 
-### Code
 
-The code is provided in the `finding_donors.ipynb` notebook file. the `visuals.py` Python file and the `census.csv` dataset file is used. 
-
-### Run
-
-In a terminal or command window, navigate to the top-level project directory `finding_donors/` (that contains this README) and run one of the following commands:
-
-```bash
-ipython notebook finding_donors.ipynb
-```  
-or
-```bash
-jupyter notebook finding_donors.ipynb
-```
-
-This will open the iPython Notebook software and project file in your browser.

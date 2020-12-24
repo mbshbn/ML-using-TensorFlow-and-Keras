@@ -1,4 +1,4 @@
-# Supervised Learning (binary classification) 
+# Supervised Learning (binary classification for an imbalanced data) 
 ## Project: Finding Donors for CharityML
 ### Goal
 Classify people based on the features explained below, to predict their income class, either above 50K or below 50K.

@@ -1,4 +1,4 @@
-# Supervised Learning (binary classification for an imbalanced data) 
+# Supervised Learning (binary classification for imbalanced data) 
 ## using [scikit-learn](http://scikit-learn.org/stable/supervised_learning.html)
 This project is for the CharityML project for [the Udacity course: Intro to Machine Learning with TensorFlow](https://www.udacity.com/course/intro-to-machine-learning-with-tensorflow-nanodegree--nd230), and [its github repository](https://github.com/udacity/intro-to-ml-tensorflow).  
 
@@ -75,7 +75,7 @@ import matplotlib.pyplot as plt
 sns.countplot(data['income'] )
 ```
 
-2. Preprocessing the data
+3. Preprocessing the data
    1. Removing redundant data
    ```
    features_raw = data.drop('education_level', axis = 1)

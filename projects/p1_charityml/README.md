@@ -1,5 +1,5 @@
 # Supervised Learning (binary classification for an imbalanced data) 
-## using [scikit-learn] (http://scikit-learn.org/stable/supervised_learning.html)
+## using [scikit-learn](http://scikit-learn.org/stable/supervised_learning.html)
 ### Goal
 Classify people based on the features explained below, to predict their income class, either above 50K or below 50K. This can be used to identigy possible donors to a charity. This is for the 1st project of [the Udacity course: Intro to Machine Learning with TensorFlow](https://www.udacity.com/course/intro-to-machine-learning-with-tensorflow-nanodegree--nd230), and [its github repository](https://github.com/udacity/intro-to-ml-tensorflow).  
 
